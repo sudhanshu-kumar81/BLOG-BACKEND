@@ -80,8 +80,9 @@ router.post('/login', async (req, res) => {
             console.log("token is ", token)
             user.tokens.push({ token: token })
             await user.save();
-            res.cookie("mycookie", token, { expires: new Date(Date.now() + 60* 1000*25), httpOnly: true }).status(200).send({
+            res.cookie("mycookie", token, { expires: new Date(Date.now() + 60* 1000*25), httpOnly: true,secure:true,sameSite:'None' }).status(200).send({
                 success: true,
+              
                 message: "you are logined",
                 token: token,
                 user: user
