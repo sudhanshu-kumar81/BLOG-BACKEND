@@ -13,7 +13,7 @@ import Feedback from './model/feedback.js'
 const router = Router()
 router.post('/register', async (req, res) => {
     try {
-        console.log("i am body of register", req.body)
+        // console.log("i am body of register", req.body)
         const { name, email, password } = req.body
         if (!email || !name || !password) {
             return res.status(401).json({
@@ -112,8 +112,8 @@ router.get('/check',async(req,res)=>{
 
 })
 router.get('/logout',(req,res)=>{
-    console.log('Cookies: ', req.cookies)
-    console.log("hello my logout page")
+    // console.log('Cookies: ', req.cookies)
+    // console.log("hello my logout page")
    
        res.clearCookie('mycookie');
        res.status(200).send({
@@ -150,7 +150,7 @@ router.post('/profile', authenticate, upload.single('avatar'), async (req, res, 
 router.post('/savepost', authenticate, async (req, res, next) => {
     
     try{
-        console.log("arrived in backend");
+        // console.log("arrived in backend");
     let {title,description,avatar,username,categories}=req.body;
     if(!title||!description||!avatar||!username||!categories){
         return res.status(403).send({
@@ -286,7 +286,7 @@ router.get('/delete', authenticate, async (req, res) => {
 router.post('/addComment', authenticate, async (req, res) => {
     try { 
      const {name,postId,comments,date}=req.body;
-     console.log(name,postId,comments,date)
+    //  console.log(name,postId,comments,date)
      if(!comments){
         return res.status(403).send({
             success: false,
