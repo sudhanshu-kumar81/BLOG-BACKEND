@@ -102,7 +102,7 @@ router.post('/login', async (req, res) => {
 //         message: "you are authorized"
 //     })
 // })
-router.checkout('/check',async(req,res)=>{
+router.get('/check',async(req,res)=>{
     const user=await User.find({});
     res.status(200).json({
         "success":true,
