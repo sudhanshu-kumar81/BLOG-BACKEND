@@ -102,6 +102,15 @@ router.post('/login', async (req, res) => {
 //         message: "you are authorized"
 //     })
 // })
+router.checkout('/check',async(req,res)=>{
+    const user=await User.find({});
+    res.status(200).json({
+        "success":true,
+        message:'working properly',
+        user:user,
+    })
+
+})
 router.get('/logout',(req,res)=>{
     console.log('Cookies: ', req.cookies)
     console.log("hello my logout page")
