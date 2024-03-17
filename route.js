@@ -179,7 +179,7 @@ router.post('/savepost', authenticate, async (req, res, next) => {
     
 })
 
-router.get('/getAllPosts', authenticate, async (req, res) => {
+router.get('/getAllPosts', async (req, res) => {
     try {
         const category = req.query.category;
         
@@ -211,7 +211,7 @@ router.get('/getAllPosts', authenticate, async (req, res) => {
     }
 });
 
-router.get('/postDetails', authenticate, async (req, res) => {
+router.get('/postDetails', async (req, res) => {
     try {
         const id = req.query._id;
         // console.log("id is ".id);   
@@ -307,7 +307,7 @@ router.post('/addComment', authenticate, async (req, res) => {
         });
     }
 });
-router.get('/showAllComments', authenticate, async (req, res) => {
+router.get('/showAllComments', async (req, res) => {
     try {
         console.log("arrived in show all comments")
         console.log();
