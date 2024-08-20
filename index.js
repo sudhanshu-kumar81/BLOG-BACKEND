@@ -11,8 +11,8 @@ app.use(express.json());
 dotenv.config({path:'./.env'})
 
 const corsOptions = {
-    origin: 'https://blog-inky-nine.vercel.app',
-    // origin: ['https://blog-inky-nine.vercel.app', 'http://localhost:5173'],
+    // origin: 'http://localhost:5173',
+    origin: ['https://blog-inky-nine.vercel.app', 'http://localhost:5173'],
     credentials: true, 
 
 };

@@ -13,7 +13,7 @@ import Feedback from './model/feedback.js'
 const router = Router()
 router.post('/register', async (req, res) => {
     try {
-        // console.log("i am body of register", req.body)
+       
         const { name, email, password } = req.body
         if (!email || !name || !password) {
             return res.status(401).json({
@@ -74,10 +74,8 @@ router.post('/login', async (req, res) => {
                 message: "incorrect password"
             })
         }
-        console.log("matched", match)
         if (match) {
             const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '30m' })
-            console.log("token is ", token)
             user.tokens.push({ token: token })
             await user.save();
             res.cookie("mycookie", token, { expires: new Date(Date.now() + 60* 1000*25), httpOnly: true,secure:true,sameSite:'None' }).status(200).send({
@@ -113,8 +111,6 @@ router.get('/check',async(req,res)=>{
 
 })
 router.get('/logout',(req,res)=>{
-    // console.log('Cookies: ', req.cookies)
-    // console.log("hello my logout page")
    
        res.clearCookie('mycookie');
        res.status(200).send({
@@ -126,7 +122,6 @@ router.post('/profile', authenticate, upload.single('avatar'), async (req, res, 
     // req.file is the `avatar` file
     // req.body will hold the text fields, if there were any
     try {
-        console.log("do i have url");
         const localFilePath = req.file.path;
         const cloudinaryResponse = await uploadOncloudinary(localFilePath);
         if (cloudinaryResponse) {
@@ -151,7 +146,6 @@ router.post('/profile', authenticate, upload.single('avatar'), async (req, res, 
 router.post('/savepost', authenticate, async (req, res, next) => {
     
     try{
-        // console.log("arrived in backend");
     let {title,description,avatar,username,categories}=req.body;
     if(!title||!description||!avatar||!username||!categories){
         return res.status(403).send({
@@ -162,14 +156,12 @@ router.post('/savepost', authenticate, async (req, res, next) => {
     const post=await Post.create({
         title,description,avatar,username,categories
     })
-    console.log("post is ",post);
     res.status(200).json({
         success:true,
         message:"post saved successfully",
         post:post
     })
     }catch(e){
-        // console.log("error is ",e);
         return res.status(500).send({
             success:false,
             message:"internal error"
@@ -183,10 +175,8 @@ router.get('/getAllPosts', async (req, res) => {
     try {
         const category = req.query.category;
         
-   console.log("category is ",category)
         if(category){
             const posts = await Post.find({ categories: category });
-            console.log("posts are ",posts);
             res.status(200).json({
                 success: true,
                 posts: posts,
@@ -194,7 +184,6 @@ router.get('/getAllPosts', async (req, res) => {
             });
         }
       else{
-        console.log("entered anside Null");
         const posts = await Post.find({});
         return res.status(200).json({
             success: true,
@@ -213,8 +202,7 @@ router.get('/getAllPosts', async (req, res) => {
 
 router.get('/postDetails', async (req, res) => {
     try {
-        const id = req.query._id;
-        // console.log("id is ".id);   
+        const id = req.query._id;  
         const posts = await Post.findById(id);
         res.status(200).json({
             success: true,
@@ -231,8 +219,7 @@ router.get('/postDetails', async (req, res) => {
 });
 router.get('/edit', authenticate, async (req, res) => {
     try {
-        const id = req.query._id;
-        console.log("id is ".id);   
+        const id = req.query._id; 
         const posts = await Post.findById(id);
         res.status(200).json({
             success: true,
@@ -248,10 +235,8 @@ router.get('/edit', authenticate, async (req, res) => {
 });
 router.post('/updatepost', authenticate, async (req, res) => {
     try {
-        const id = req.query._id;
-        console.log("id is ".id);  
+        const id = req.query._id;  
       const  {title,description,avatar,username,categories}=req.body; 
-    //   console.log(title,description,avatar,username,categories)
         const posts = await Post.findByIdAndUpdate(id,{title,description,avatar,username,categories},{new:true})
         res.status(200).json({
             success: true,
@@ -268,9 +253,7 @@ router.post('/updatepost', authenticate, async (req, res) => {
 
 router.get('/delete', authenticate, async (req, res) => {
     try {
-        console.log("arrived in deleted route")
         const id = req.query._id;
-        console.log("id is ".id);  
 
         const response = await Post.findByIdAndDelete(id)
         res.status(200).json({
@@ -287,7 +270,6 @@ router.get('/delete', authenticate, async (req, res) => {
 router.post('/addComment', authenticate, async (req, res) => {
     try { 
      const {name,postId,comments,date}=req.body;
-    //  console.log(name,postId,comments,date)
      if(!comments){
         return res.status(403).send({
             success: false,
@@ -309,10 +291,8 @@ router.post('/addComment', authenticate, async (req, res) => {
 });
 router.get('/showAllComments', async (req, res) => {
     try {
-        console.log("arrived in show all comments")
         console.log();
         const id = req.query._id;
-        console.log("id is ".id);  
     // const comment=await Comment.findById(id);
     const comment=await Comment.find({postId:id})
         res.status(200).json({
@@ -329,8 +309,7 @@ router.get('/showAllComments', async (req, res) => {
 });
 router.get('/deleteComment', authenticate, async (req, res) => {
     try {
-        const id = req.query._id;
-        console.log("id is ".id);  
+        const id = req.query._id; 
     const DeletedComment=await Comment.findByIdAndDelete(id);
         res.status(200).json({
             success: true,
@@ -364,7 +343,6 @@ router.get('/Islogin', authenticate, async (req, res) => {
 });
 
 router.get('/getDetails', authenticate, async (req, res) => {
-    console.log("entered in getDetails")
     try {
         const user=req.rootUser;
      res.status(200).json({
@@ -381,10 +359,8 @@ router.get('/getDetails', authenticate, async (req, res) => {
 });
 
 router.post('/saveSuggestion', authenticate, async (req, res) => {
-    console.log("entered in saving suggestion")
     try {
         const {name,email,suggestion,issue}=req.body;
-        console.log(name,email,suggestion,issue)
      const feedback=await Feedback.create({name,email,issue,suggestion})
      res.status(200).json({
         success:true,
